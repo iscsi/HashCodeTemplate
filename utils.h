@@ -174,13 +174,13 @@ struct Archiver
 
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
-			LOG(RED, "nincs meg a file : " << filename);
+			LOGC(RED, "nincs meg a file : " << filename);
 			return "";
 		}
 
 		if (!GetFileTime(hFile, NULL, &ftModified, NULL))
 		{
-			LOG(RED, "hiba az utolso modositas lekerdezesenel : " << filename);
+			LOGC(RED, "hiba az utolso modositas lekerdezesenel : " << filename);
 			return FALSE;
 		}
 		FileTimeToLocalFileTime(&ftModified, &ftModifiedLocal);

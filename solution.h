@@ -26,7 +26,9 @@ struct Solution
 	string getFileName() const;
 };
 
-int Solution::sD;
+bool Solution::staticInited = false;
+uint32_t Solution::idCounter = 0;
+
 void Solution::initStatic(const Input& input)
 {
 	staticInited = true;
