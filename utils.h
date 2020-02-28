@@ -200,25 +200,25 @@ struct Archiver
 		mVersion.clear();
 		for (auto actFileName : ARCHIVERFILES)
 		{
-			umax(mVersion, getFileCurrentIdentity(ARCHIVERDIR + actFileName));
+			umax(mVersion, getFileCurrentIdentity("../" + actFileName));
 		}
 	}
 
 	bool CheckVersionAlreadyExists()
 	{
 		struct stat info;
-		if (stat("Archive", &info) != 0)
+		if (stat(ARCHIVERDIR.c_str(), &info) != 0)
 		{
-			CreateDirectory("Archive", NULL);
+			CreateDirectory(ARCHIVERDIR.c_str(), NULL);
 		}
-		string nd = ("Archive/" + mVersion);
+		string nd = (ARCHIVERDIR + mVersion);
 		if (stat(nd.c_str(), &info) != 0)
 		{
 			CreateDirectory(nd.c_str(), NULL);
 			LOGC(GREEN, "new version : " << nd << " created");
 			for (auto actFileName : ARCHIVERFILES)
 			{
-				string from = ARCHIVERDIR + actFileName;
+				string from = "../" + actFileName;
 				string to = nd + "/" + actFileName;
 				if (!CopyFile(from.c_str(), to.c_str(), TRUE))
 				{

@@ -12,12 +12,10 @@ int main(int argc, char** argv)
 	Solution sol;
 
 	sol.solve();
-	sol.print();
+	string solFName = sol.print();
 
-	const string solFileName = sol.getFileName();
-	
 	uint32_t solScore = sol.getRealScore();
-	Judge judge(sol.getFileName(), input);
+	Judge judge(solFName, input);
 
 	uint32_t score = judge.getScore();
 	assert(score == solScore);
