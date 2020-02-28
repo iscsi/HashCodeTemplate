@@ -6,11 +6,13 @@ struct Input
 {
 	const string fileName = INPUTDIR + TASKNAME + INPUTEXT;
 
-	Input(){}
-
-	bool readData()
+	Input()
 	{
-		assert(false && "implement input read");
-		return true;
+		setActiveInputFile(fileName);
+		read();
+		closeActiveInputFile();
+	}
+	void read()
+	{
 	}
 };

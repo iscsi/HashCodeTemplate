@@ -6,53 +6,65 @@
 struct Solution 
 {
 	uint32_t id;
-	uint32_t parentId;
+	uint32_t parentId = 0;
 	bool valid = false;
 	bool finalized = false;
-
-	void init();
+	uint32_t realScore = 0;
+	
+//static start
+	static bool staticInited;
+	static uint32_t idCounter;
+	static void initStatic(const Input& input);
+//static end
+	Solution();
+	
 	void solve();
-	void step();
+	bool step();
 	void print() const;
 	uint32_t getScore() const;
 	uint32_t getRealScore() const;
 	string getFileName() const;
 };
 
-void Solution::init()
+int Solution::sD;
+void Solution::initStatic(const Input& input)
 {
-
+	staticInited = true;
+}
+Solution::Solution()
+{
+	assert(staticInited);
 }
 
 void Solution::solve()
 {
-
+	while (step());
 }
 
-void Solution::step()
+bool Solution::step()
 {
 
+	return true;
 }
 
 void Solution::print() const
 {
+	const string fname = getFileName();
+	setActiveOutputFile(fname);
 
+	closeActiveOutputFile();
 }
 
 uint32_t Solution::getScore() const
 {
-	assert(false);
-	return 0;
+	return realScore;
 }
-
 uint32_t Solution::getRealScore() const
 {
-	assert(false);
-	return 0;
+	return realScore;
 }
 
 std::string Solution::getFileName() const
 {
-	assert(false);
-	return "";
+	return OUTPUTDIR + TASKNAME + "_"+ to_string(realScore) + "_" + getTimeStampForFileName() + OUTPUTEXT;
 }

@@ -7,23 +7,22 @@ int main(int argc, char** argv)
 {
 	
 	Input input;
-	bool inputReadSucceded = input.readData();
 
-	assert(inputReadSucceded == true);
-
+	Solution::initStatic(input);
 	Solution sol;
 
-	sol.init(); // vagy sol.copy(sol);
 	sol.solve();
+	sol.print();
 
 	const string solFileName = sol.getFileName();
 	
 	uint32_t solScore = sol.getRealScore();
-	Judge judge(sol.getFileName());
+	Judge judge(sol.getFileName(), input);
 
 	uint32_t score = judge.getScore();
 	assert(score == solScore);
 
+	LOG("task: " << TASKNAME << " ,score:" << score);
 	//Archiver myArchive;
 
 	//statTest();

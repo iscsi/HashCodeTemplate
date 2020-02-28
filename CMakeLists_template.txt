@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.6)
 project(template)
-add_executable(template template.cpp utils.h config.h input.h judge.h solution.h)
+add_executable(template main.cpp utils.h config.h input.h judge.h solution.h)
 add_definitions(-DHOME -D_CRT_SECURE_NO_WARNINGS -DNOMINMAX)
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT template) 

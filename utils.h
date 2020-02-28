@@ -20,6 +20,16 @@ template<class T> bool umax(T &a, T b) { return a < b ? (a = b, true) : false; }
 
 using namespace std;
 
+string getTimeStampForFileName()
+{
+	std::time_t t = std::time(nullptr);
+	std::ostringstream tmpss;
+	tmpss << put_time(localtime(&t), "%F_%H_%M_%S");
+	string res = tmpss.str();
+	replace(res.begin(), res.end(), '-', '_');
+	return res;
+}
+
 //Logger start
 
 enum LOGCOLOUR
@@ -56,9 +66,11 @@ struct LOGGER
 };
 
 #define __FILENAME__ (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
-#define LOG(colour_, message_)                  \
+#define LOGC(colour_, message_)                  \
     LOGGER().Get(colour_)                       \
     << __FILENAME__ << ":" << __LINE__ <<" --- " << message_;\
+
+#define LOG(message_) LOGC(LOGCOLOUR::WHITE, message_)
 
 //Logger end
 
@@ -100,16 +112,16 @@ void printStat(const vector<T>& _data, string& _name)
 	}
 	if (std::abs(static_cast<double>(sum) - avg) > 1e-9)
 	{
-		LOG(RED, "tulcsordulas : " << _name);
+		LOGC(RED, "tulcsordulas : " << _name);
 		assert(false);
 		return;
 	}
 	if (_data.empty())
 	{
-		LOG(RED, "ures adat : " << _name);
+		LOGC(RED, "ures adat : " << _name);
 		return;
 	}
-	LOG(GREEN, _name << ":dbszam: " << _data.size() << \
+	LOGC(GREEN, _name << ":dbszam: " << _data.size() << \
 		";min: " << mi << 
 		";max: " << mx << 
 		";avg: " << avg / _data.size() << 
@@ -152,9 +164,7 @@ void statTest()
 struct Archiver 
 {
 	string mVersion;
-	string mSourceDirectory;
-	vector<string> mFileNames;
-
+	
 	string getFileCurrentIdentity(const string& filename)
 	{
 		HANDLE hFile;
@@ -188,9 +198,9 @@ struct Archiver
 	void SetVersion()
 	{
 		mVersion.clear();
-		for (auto actFileName : mFileNames)
+		for (auto actFileName : ARCHIVERFILES)
 		{
-			umax(mVersion, getFileCurrentIdentity(mSourceDirectory + actFileName));
+			umax(mVersion, getFileCurrentIdentity(ARCHIVERDIR + actFileName));
 		}
 	}
 
@@ -205,32 +215,30 @@ struct Archiver
 		if (stat(nd.c_str(), &info) != 0)
 		{
 			CreateDirectory(nd.c_str(), NULL);
-			LOG(GREEN, "new version : " << nd << " created");
-			for (auto actFileName : mFileNames)
+			LOGC(GREEN, "new version : " << nd << " created");
+			for (auto actFileName : ARCHIVERFILES)
 			{
-				string from = mSourceDirectory + actFileName;
+				string from = ARCHIVERDIR + actFileName;
 				string to = nd + "/" + actFileName;
 				if (!CopyFile(from.c_str(), to.c_str(), TRUE))
 				{
-					LOG(RED, "copy failed: " << to );
+					LOGC(RED, "copy failed: " << to );
 				}
 				else
 				{
-					LOG(GREEN, "new version : " << actFileName << " saved");
+					LOGC(GREEN, "new version : " << actFileName << " saved");
 				}
 			}
 		}
 		else
 		{
-			LOG(GREEN, "version : " << nd << " already exists");
+			LOGC(GREEN, "version : " << nd << " already exists");
 		}
 		return true;
 	}
 
 	Archiver()
 	{
-		mSourceDirectory = "../";
-		mFileNames = { "template.cpp", "config.h", "utils.h", "input.h", "solution.h", "judge.h" };
 		SetVersion();
 		CheckVersionAlreadyExists();
 	}
@@ -247,11 +255,11 @@ void ReadParam(int argc, char** argv, uint32_t pos, T& val)
 	{
 		stringstream ss(argv[pos]);
 		ss >> val;
-		LOG(GREEN, "param readed pos: " << pos << " ; val: " << val);
+		LOGC(GREEN, "param readed pos: " << pos << " ; val: " << val);
 	}
 	else
 	{
-		LOG(RED, "param read error: " << pos);
+		LOGC(RED, "param read error: " << pos);
 	}
 }
 
@@ -287,6 +295,7 @@ void setActiveInputFile(const string& fname)
 void closeActiveInputFile()
 {
 	assert(!activeInputFile.empty());
+	activeInputFile.clear();
 	fclose(stdin);
 }
 
@@ -299,7 +308,8 @@ void setActiveOutputFile(const string& fname)
 
 void closeActiveOutputFile()
 {
-	assert(activeOutputFile.empty());
+	assert(!activeOutputFile.empty());
+	activeOutputFile.clear();
 	fclose(stdout);
 }
 
@@ -312,7 +322,8 @@ void setActiveErrorFile(const string& fname)
 
 void closeActiveErrorFile()
 {
-	assert(activeErrorFile.empty());
+	assert(!activeErrorFile.empty());
+	activeErrorFile.clear();
 	fclose(stderr);
 }
 
