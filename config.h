@@ -14,7 +14,7 @@ static const string OUTPUTEXT = ".out";
 static const string LOGGERFNAME = OUTPUTDIR + "log.txt";
 
 static const string ARCHIVERDIR = "../";
-static const vector<string> ARCHIVERFILES = { "ghc_template.cpp", 
+static const vector<string> ARCHIVERFILES = {	"main.cpp", 
 												"config.h", 
 												"utils.h", 
 												"input.h", 

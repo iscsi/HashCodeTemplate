@@ -20,7 +20,7 @@ struct Solution
 	
 	void solve();
 	bool step();
-	void print() const;
+	string print() const;
 	uint32_t getScore() const;
 	uint32_t getRealScore() const;
 	string getFileName() const;
@@ -49,12 +49,13 @@ bool Solution::step()
 	return true;
 }
 
-void Solution::print() const
+string Solution::print() const
 {
 	const string fname = getFileName();
 	setActiveOutputFile(fname);
 
 	closeActiveOutputFile();
+	return fname;
 }
 
 uint32_t Solution::getScore() const
