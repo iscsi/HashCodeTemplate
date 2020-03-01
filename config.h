@@ -4,7 +4,7 @@
 
 using namespace std;
 
-static const string TASKNAME = "ghc06";
+static const string TASKNAME = "ghc02";
 
 static const string INPUTDIR = "../in/";
 static const string INPUTEXT = ".in";

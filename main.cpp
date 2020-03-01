@@ -19,8 +19,8 @@ int main(int argc, char** argv)
 
 	uint32_t score = judge.getScore();
 	assert(score == solScore);
-
-	LOG("task: " << TASKNAME << " ,score:" << score);
+	
+	LOG("task: " << TASKNAME << " ,score:" << solScore);
 	//Archiver myArchive;
 
 	//statTest();
